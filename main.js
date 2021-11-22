@@ -28,6 +28,59 @@ console.log(sketch);
 
 document.getElementById("drawn").innerHTML = "Skecth to be drawn : "+ sketch;
 
+function updateCanvas()
+{
+  background("white");  
+  random_no = Math.floor((Math.random()*quick_draw_data_set.length)+1);
+
+console.log(random_no);
+
+var sketch= quick_draw_data_set[random_no];
+
+console.log(sketch);
+
+document.getElementById("drawn").innerHTML = "Skecth to be drawn : "+ sketch;
+}
+
+function setup()
+{
+    
+    canvas = createCanvas(280, 280);
+canvas.center();
+background("white");  
+}
+
+function draw()
+{
+    check_sketch();
+    if( drawn_sketch == sketch)
+    {
+        answer_holder="set";
+        score = score + 1;
+        console.log(score);
+        document.getElementById("score").innerHTML = "Score " + score;
+    }
+}
+
+function check_sketch()
+{
+    timer_counter = timer_counter + 1;
+    document.getElementById("timer"). innerHTML = "Timer" + timer_counter;
+    console.log(timer_counter);
+    if(timer_counter > 400)
+    {
+        timer_counter = 0;
+        timer_check ="completed";
+        if(timer_check== "completed" || answer_holder == "set")
+        {
+            timer_check = "";
+            answer_holder = "";
+        updateCanvas();
+        }
+
+    }
+}
+
 var timer_counter = 0;
 
 var timer_check= "";
