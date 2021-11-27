@@ -28,6 +28,11 @@ console.log(sketch);
 
 document.getElementById("drawn").innerHTML = "Skecth to be drawn : "+ sketch;
 
+
+function preload()
+{
+    classifier = ml5.imageClassifier('DoodleNet');
+}
 function updateCanvas()
 {
   background("white");  
@@ -48,10 +53,21 @@ function setup()
     canvas = createCanvas(280, 280);
 canvas.center();
 background("white");  
+
+canvas.mouseReleased(classifyCanvas);
+
 }
 
 function draw()
 {
+ strokeWeight(13);
+ stroke(0, 204, 204);
+ if (mouseIsPressed )
+ {
+     line(pmouseX, pmouseY, mouseX, mouseY);
+ }
+
+
     check_sketch();
     if( drawn_sketch == sketch)
     {
@@ -62,6 +78,28 @@ function draw()
     }
 }
 
+function classifyCanvas()
+{
+    classifier.classify(canvas, gotResult);
+
+}
+
+function gotResult(error, results)
+{
+ if(error)
+ {
+     console.error(error);
+ }
+ else
+ {
+console.log(results);
+console.log(drawn_sketch);
+drawn_sketch = results[0].label;
+document.getElementById("yumy").innerHTML =  "Your Sketch : " + drawn_sketch;
+
+document.getElementById('condifience').innerHTML = 'Confidence: ' + Math.round(results[0].confidence * 100) + '%';
+}
+}
 function check_sketch()
 {
     timer_counter = timer_counter + 1;
@@ -85,7 +123,7 @@ var timer_counter = 0;
 
 var timer_check= "";
 
-var drawn_sketch= "";
+var drawn_sketch= "0";
 
 var answer_holder= "";
 var score= "";
